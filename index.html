@@ -64,7 +64,7 @@
                 <a href="#about" class="hover:text-violet-600 transition-colors">세미나 소개</a>
                 <a href="#activities" class="hover:text-violet-600 transition-colors">주요 활동</a>
                 <a href="#details" class="hover:text-violet-600 transition-colors">세부 정보</a>
-                <a href="https://www.naver.com" class="bg-violet-600 text-white px-4 py-2 rounded-full hover:bg-violet-700 transition-colors">참가 신청</a>
+                <a href="#register" class="bg-violet-600 text-white px-4 py-2 rounded-full hover:bg-violet-700 transition-colors">참가 신청</a>
             </div>
             <button id="mobile-menu-button" class="md:hidden p-2">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -76,7 +76,7 @@
             <a href="#about" class="block text-center py-3 px-6 text-sm hover:bg-violet-100 transition-colors">세미나 소개</a>
             <a href="#activities" class="block text-center py-3 px-6 text-sm hover:bg-violet-100 transition-colors">주요 활동</a>
             <a href="#details" class="block text-center py-3 px-6 text-sm hover:bg-violet-100 transition-colors">세부 정보</a>
-            <a href="https://www.naver.com" class="block text-center py-3 px-6 text-sm bg-violet-200 hover:bg-violet-300 transition-colors">참가 신청</a>
+            <a href="#register" class="block text-center py-3 px-6 text-sm bg-violet-200 hover:bg-violet-300 transition-colors">참가 신청</a>
         </div>
     </header>
 
@@ -228,7 +228,7 @@
                         <p>신청 기간: 9월 1일(월) ~ 9월 9일(화)</p>
                         <p class="text-sm mt-1">포스터의 QR코드 또는 리로스쿨 공지글을 통해 신청하세요.</p>
                     </div>
-                    <a href="https://www.naver.com" class="inline-block bg-white text-violet-600 font-bold px-8 py-4 rounded-full text-lg hover:bg-slate-100 transition-transform transform hover:scale-105 mt-8">
+                    <a href="#register" class="inline-block bg-white text-violet-600 font-bold px-8 py-4 rounded-full text-lg hover:bg-slate-100 transition-transform transform hover:scale-105 mt-8">
                         신청 페이지 바로가기
                     </a>
                 </div>
@@ -275,9 +275,9 @@
             const competencyChart = new Chart(ctx, {
                 type: 'bar',
                 data: {
-                    labels: ['창의적 융합 능력', '독창적 기획력', '데이터 분석력', '탐구 및 보고서 작성 능력', '진로 탐색 역량'],
+                    labels: ['Creativity & Fusion', 'Original Planning', 'Data Analytics', 'Research & Writing', 'Career Exploration'],
                     datasets: [{
-                        label: '역량 성장 기대치',
+                        label: 'Competency Growth Potential',
                         data: [85, 80, 75, 90, 95],
                         backgroundColor: [
                             'rgba(139, 92, 246, 0.7)',
@@ -314,6 +314,23 @@
                             ticks: {
                                 font: {
                                     size: 14
+                                },
+                                callback: function(value, index, values) {
+                                    const labels = ['창의적 융합 능력', '독창적 기획력', '데이터 분석력', '탐구 및 보고서 작성 능력', '진로 탐색 역량'];
+                                    const label = labels[index];
+                                    const words = label.split(' ');
+                                    let wrappedLabels = [];
+                                    let currentLine = '';
+                                    words.forEach(word => {
+                                        if ((currentLine + ' ' + word).length > 16) {
+                                            wrappedLabels.push(currentLine.trim());
+                                            currentLine = word;
+                                        } else {
+                                            currentLine += ' ' + word;
+                                        }
+                                    });
+                                    wrappedLabels.push(currentLine.trim());
+                                    return wrappedLabels;
                                 }
                             }
                         }
@@ -325,14 +342,10 @@
                         tooltip: {
                             callbacks: {
                                 label: function(context) {
-                                    let label = context.dataset.label || '';
-                                    if (label) {
-                                        label += ': ';
-                                    }
-                                    if (context.parsed.x !== null) {
-                                        label += context.parsed.x + '%';
-                                    }
-                                    return label;
+                                    const labels = ['창의적 융합 능력', '독창적 기획력', '데이터 분석력', '탐구 및 보고서 작성 능력', '진로 탐색 역량'];
+                                    const label = labels[context.dataIndex];
+                                    let value = context.parsed.x !== null ? context.parsed.x + '%' : '';
+                                    return label + ': ' + value;
                                 }
                             }
                         }
